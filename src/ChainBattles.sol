@@ -6,6 +6,13 @@ import "openzeppelin-contracts/contracts/utils/Counters.sol";
 import "openzeppelin-contracts/contracts/utils/Strings.sol";
 import "openzeppelin-contracts/contracts/utils/Base64.sol";
 
+// Example Contract Address on Polygon Mumbai: 0xd8cbd670490fd1680b2947f2ae5e18ba81b4bc68
+// Transaction hash: 0xf23dcb595c3c0429f288b17b4edab0180c05922cc11fd7172f3a9b567b991713
+
+// Verification on Polygonscan:
+// GUID: yxhm4lr8egqnab5uhbjnu8ik6asbtkkuyvnt1bqsejeuie6xws
+// URL: https://mumbai.polygonscan.com/address/0xd8cbd670490fd1680b2947f2ae5e18ba81b4bc68#code
+
 contract ChainBattles is ERC721URIStorage {
     using Strings for uint256;
     using Counters for Counters.Counter;
