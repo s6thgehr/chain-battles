@@ -18,6 +18,13 @@ contract ChainBattles is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    struct Properties {
+        uint256 level;
+        uint256 speed;
+        uint256 strength;
+        uint256 life;
+    }
+
     mapping(uint256 => uint256) public tokenIdToLevels;
 
     constructor() ERC721("Chain Battles", "CBTLS") {}
