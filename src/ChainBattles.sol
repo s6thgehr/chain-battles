@@ -8,6 +8,10 @@ import "openzeppelin-contracts/contracts/utils/Base64.sol";
 import "chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
+// Contract address on Polygon Mumbai: 0x513b542be775be31caeff19f97753367757ecaa8
+// Transaction hash: 0x7c249edfc9354ddf398cd04ce9303e18743bcf97f981f71f9a83656216cb6a97
+// GUID of contract verification: mkurvwtrvdkrjp21gtcwhlwtfkwy4uzdrcttg3xmyarv97fs4v
+
 contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
     using Strings for uint256;
     using Counters for Counters.Counter;
