@@ -8,9 +8,9 @@ import "openzeppelin-contracts/contracts/utils/Base64.sol";
 import "chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-// Contract address on Polygon Mumbai: 0x7d896ba94e7c3fec5045bd80f1ed767f06dba769
-// Transaction hash: 0x80d74bfa4118604bc5c368cbeb2e99e0d720192609296c800fb8c57a95470db0
-// GUID of contract verification: a6yrbjp5prvakia6bqp5qdacczy
+// Contract address on Polygon Mumbai: 0xec6851ef5baa985dfa4aea674f1fb657a00c84a3
+// Transaction hash: 0xcabda1709a439bab223c99333d8c1212741b6cce403a748277ac99e104698d1e
+// GUID of contract verification: g6daahtnmma4tfghwp9sqbidz9q5wciljjksvbatfvkdvnwjiv
 
 contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
     using Strings for uint256;
@@ -42,24 +42,16 @@ contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
     bytes32 keyHash =
         0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f;
 
-    // Depends on the number of requested values that you want sent to the
-    // fulfillRandomWords() function. Storing each word costs about 20,000 gas,
-    // so 100,000 is a safe default for this example contract. Test and adjust
-    // this limit based on the network that you select, the size of the request,
-    // and the processing of the callback request in the fulfillRandomWords()
-    // function.
-    uint32 callbackGasLimit = 100000;
+    uint32 callbackGasLimit = 1000000;
 
     // The default is 3, but you can set this higher.
     uint16 requestConfirmations = 3;
 
-    // For this example, retrieve 2 random values in one request.
-    // Cannot exceed VRFCoordinatorV2.MAX_NUM_WORDS.
     uint32 numWords = 3;
 
     address s_owner;
 
-    mapping(uint256 => address) requestIdToSender;
+    mapping(uint256 => uint256) requestIdToTokenId;
 
     constructor(uint64 subscriptionId)
         ERC721("Chain Battles", "CBTLS")
@@ -127,36 +119,15 @@ contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
     }
 
     function mint() public {
-        uint256 requestId = COORDINATOR.requestRandomWords(
-            keyHash,
-            s_subscriptionId,
-            requestConfirmations,
-            callbackGasLimit,
-            numWords
-        );
-        requestIdToSender[requestId] = msg.sender;
-    }
-
-    // It would be better to save random words and use another function to perform the logic like minting etc.
-    // See Chainlink docs security considerations
-    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
-        internal
-        override
-    {
-        uint256 _speed = 10 + (randomWords[0] % 5);
-        uint256 _strength = 10 + (randomWords[1] % 5);
-        uint256 _life = 10 + (randomWords[2] % 5);
-
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
-        address owner = requestIdToSender[requestId];
-        _safeMint(owner, newItemId);
+        _safeMint(msg.sender, newItemId);
 
         tokenIdToProperties[newItemId] = Properties({
-            level: 0,
-            speed: _speed,
-            strength: _strength,
-            life: _life
+            level: 1,
+            speed: 10,
+            strength: 10,
+            life: 10
         });
         _setTokenURI(newItemId, getTokenURI(newItemId));
     }
@@ -167,10 +138,32 @@ contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
             msg.sender == ownerOf(tokenId),
             "You must own this NFT to train it."
         );
-        tokenIdToProperties[tokenId].level += 1;
-        tokenIdToProperties[tokenId].speed += 1;
-        tokenIdToProperties[tokenId].strength += 1;
-        tokenIdToProperties[tokenId].life += 1;
-        _setTokenURI(tokenId, getTokenURI(tokenId));
+        uint256 requestId = COORDINATOR.requestRandomWords(
+            keyHash,
+            s_subscriptionId,
+            requestConfirmations,
+            callbackGasLimit,
+            numWords
+        );
+        requestIdToTokenId[requestId] = tokenId;
+    }
+
+    // It would be better to save random words and use another function to perform the logic like minting etc.
+    // See Chainlink docs security considerations
+    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
+        internal
+        override
+    {
+        uint256 _speed = (randomWords[0] % 5);
+        uint256 _strength = (randomWords[1] % 5);
+        uint256 _life = (randomWords[2] % 5);
+
+        uint256 _tokenId = requestIdToTokenId[requestId];
+
+        tokenIdToProperties[_tokenId].level += 1;
+        tokenIdToProperties[_tokenId].speed += _speed;
+        tokenIdToProperties[_tokenId].strength += _strength;
+        tokenIdToProperties[_tokenId].life += _life;
+        _setTokenURI(_tokenId, getTokenURI(_tokenId));
     }
 }
