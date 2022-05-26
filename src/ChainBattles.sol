@@ -8,10 +8,6 @@ import "openzeppelin-contracts/contracts/utils/Base64.sol";
 import "chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-// Contract address on Polygon Mumbai: 0xec6851ef5baa985dfa4aea674f1fb657a00c84a3
-// Transaction hash: 0xcabda1709a439bab223c99333d8c1212741b6cce403a748277ac99e104698d1e
-// GUID of contract verification: g6daahtnmma4tfghwp9sqbidz9q5wciljjksvbatfvkdvnwjiv
-
 contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
     using Strings for uint256;
     using Counters for Counters.Counter;
@@ -101,13 +97,13 @@ contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
             tokenId.toString(),
             '", "description": "Battles on chain", "image": "',
             generateCharacter(tokenId),
-            '", "attributes": [ { "display_type": "number", "train_type": "Speed", "value": "',
+            '", "attributes": [ { "display_type": "number", "trait_type": "Speed", "value": "',
             tokenIdToProperties[tokenId].speed.toString(),
-            '"}, {"display_type": "number", "train_type": "Strength", "value": "',
+            '"}, {"display_type": "number", "trait_type": "Strength", "value": "',
             tokenIdToProperties[tokenId].strength.toString(),
-            '"}, {"display_type": "number", "train_type": "Life", "value": "',
+            '"}, {"display_type": "number", "trait_type": "Life", "value": "',
             tokenIdToProperties[tokenId].life.toString(),
-            '" } ] }'
+            '"} ] }'
         );
         return
             string(
