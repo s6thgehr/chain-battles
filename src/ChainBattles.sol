@@ -8,12 +8,9 @@ import "openzeppelin-contracts/contracts/utils/Base64.sol";
 import "chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-// Example Contract Address on Polygon Mumbai: 0xd8cbd670490fd1680b2947f2ae5e18ba81b4bc68
-// Transaction hash: 0xf23dcb595c3c0429f288b17b4edab0180c05922cc11fd7172f3a9b567b991713
-
-// Verification on Polygonscan:
-// GUID: yxhm4lr8egqnab5uhbjnu8ik6asbtkkuyvnt1bqsejeuie6xws
-// URL: https://mumbai.polygonscan.com/address/0xd8cbd670490fd1680b2947f2ae5e18ba81b4bc68#code
+// Contract address on Polygon Mumbai: 0x7d896ba94e7c3fec5045bd80f1ed767f06dba769
+// Transaction hash: 0x80d74bfa4118604bc5c368cbeb2e99e0d720192609296c800fb8c57a95470db0
+// GUID of contract verification: a6yrbjp5prvakia6bqp5qdacczy
 
 contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
     using Strings for uint256;
@@ -105,40 +102,20 @@ contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
         return property.level.toString();
     }
 
+    // TODO: Research a nicer way to format this
     function getTokenURI(uint256 tokenId) public view returns (string memory) {
         bytes memory dataURI = abi.encodePacked(
-            "{",
-            '"name": "Chain Battles #',
+            '{"name": "Chain Battles #',
             tokenId.toString(),
-            '",',
-            '"description": "Battles on chain",',
-            '"image": "',
+            '", "description": "Battles on chain", "image": "',
             generateCharacter(tokenId),
-            '",',
-            '"attributes": [',
-            "{",
-            '"display_type": "number",',
-            '"train_type": "Speed",',
-            '"value": "',
+            '", "attributes": [ { "display_type": "number", "train_type": "Speed", "value": "',
             tokenIdToProperties[tokenId].speed.toString(),
-            '"',
-            "},",
-            "{",
-            '"display_type": "number",',
-            '"train_type": "Strength",',
-            '"value": "',
+            '"}, {"display_type": "number", "train_type": "Strength", "value": "',
             tokenIdToProperties[tokenId].strength.toString(),
-            '"',
-            "},",
-            "{",
-            '"display_type": "number",',
-            '"train_type": "Life",',
-            '"value": "',
+            '"}, {"display_type": "number", "train_type": "Life", "value":, "',
             tokenIdToProperties[tokenId].life.toString(),
-            '"',
-            "}",
-            "]",
-            "}"
+            '" } ] }'
         );
         return
             string(
