@@ -105,7 +105,7 @@ contract ChainBattles is ERC721URIStorage, VRFConsumerBaseV2 {
             tokenIdToProperties[tokenId].speed.toString(),
             '"}, {"display_type": "number", "train_type": "Strength", "value": "',
             tokenIdToProperties[tokenId].strength.toString(),
-            '"}, {"display_type": "number", "train_type": "Life", "value":, "',
+            '"}, {"display_type": "number", "train_type": "Life", "value": "',
             tokenIdToProperties[tokenId].life.toString(),
             '" } ] }'
         );
